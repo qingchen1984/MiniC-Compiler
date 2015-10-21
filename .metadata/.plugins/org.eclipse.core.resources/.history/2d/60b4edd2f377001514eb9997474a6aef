@@ -1,0 +1,16 @@
+package io;
+
+public class Buffer {
+	
+	private int lexemeBegin;
+	private int forward;
+	
+	public char getChar(){
+		return 'a';
+	}
+	
+	public static void main(String[] args){
+		char c = (char)-1;
+		System.out.println(c);
+	}
+}

@@ -1,0 +1,5 @@
+package FA;
+
+public class DFANode {
+
+}

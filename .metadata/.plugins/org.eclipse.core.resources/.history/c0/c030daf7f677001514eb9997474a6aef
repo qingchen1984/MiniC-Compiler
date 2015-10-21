@@ -1,0 +1,13 @@
+package lex;
+
+public class LexicalAnalyzer {
+	
+	public void scan(String filename){
+		
+	}
+	
+	public static void main(String[] args){
+		
+	}
+
+}

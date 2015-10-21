@@ -1,0 +1,6 @@
+package FA;
+
+public class NFANode {
+	public int state;
+	public HashMap<>
+}

@@ -1,0 +1,5 @@
+package lex;
+
+public class LexicalAnalyzer {
+	private LinkedList<>
+}

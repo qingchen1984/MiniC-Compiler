@@ -1,0 +1,10 @@
+package FA;
+
+import java.util.HashMap;
+
+import config.FAEdge;
+
+public class DFANode {
+	public char state;
+	public HashMap<FAEdge,DFANode> outstates;
+}

@@ -1,0 +1,14 @@
+package io;
+
+public class Buffer {
+	
+	private static char end = (char)-1;//ÉÚ±ø±ê¼Ç
+	
+	private int lexemeBegin;
+	private int forward;
+	
+	public char getChar(){
+		return 'a';
+	}
+	
+}
