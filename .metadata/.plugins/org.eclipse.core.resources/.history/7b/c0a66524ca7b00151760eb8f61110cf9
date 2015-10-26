@@ -8,13 +8,11 @@ import java.util.ArrayList;
 
 public class Scan {
 	
-	private static String inputPath = "Input/";
-	
 	public String input;
 	public int pointer;
 	
 	public Scan(String filename){
-		File sourceFile = new File(Scan.inputPath+filename);//"input/source1.c"
+		File sourceFile = new File(filename);//"input/source1.c"
 		ArrayList<Character> trans = new ArrayList<Character>();
 		try {
 			//DataInputStream in = new DataInputStream(new FileInputStream(sourceFile));
@@ -120,10 +118,6 @@ public class Scan {
 	
 	public int getLength(){
 		return this.input.length();
-	}
-	
-	public String getSubStr(int index,int length){
-		return null;
 	}
 	
 }

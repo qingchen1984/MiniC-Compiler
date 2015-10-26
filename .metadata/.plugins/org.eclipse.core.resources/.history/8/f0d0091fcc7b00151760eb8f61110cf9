@@ -76,7 +76,6 @@ public class LexicalAnalyzer {
 		int index = 0;
 		while(index < scan.getLength()){
 			Token token = analyze(index);
-			result.add(token);
 			index = scan.getIndex();
 		}
 		this.scan.retract(scan.getLength()-1);
@@ -86,52 +85,9 @@ public class LexicalAnalyzer {
 	/**
 	 * 对某一位置进行词法分析
 	 * @param index 字母开始的位置
-	 * @return 单个Token
+	 * @return
 	 */
 	public Token analyze(int index){
-		int length = scan.getLength();
-		int type = 0;
-		String value = "";
-		while(index < length){
-			char ch = scan.getNextChar();
-			index++;
-			if(isDigit(ch)){
-				
-			} else if (isLetter(ch)){
-				
-			} else {
-				switch(ch){
-				case '=':
-				case '+':
-				case '-':
-				case '*':
-				case '/':
-				case '<':
-				case '>':
-				case '!':
-				case '|':
-				case '&':
-				case ';':
-				case '{':
-				case '}':
-				case '[':
-				case ']':
-				case '(':
-				case ')':
-				case '#':
-				default:
-				}
-			}
-		}
-		Token token = new Token(type,value);
-		return token;
-	}
-	
-	private boolean isDigit(char c){
-		return false;
-	}
-	
-	private boolean isLetter(char c){
-		return false;
+		return null;
 	}
 }

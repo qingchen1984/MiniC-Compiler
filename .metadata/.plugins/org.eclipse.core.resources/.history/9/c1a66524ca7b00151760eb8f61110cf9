@@ -1,0 +1,43 @@
+package lex;
+
+import java.util.ArrayList;
+
+public class LexicalAnalyzer {
+	
+	/*
+	 * 自己实现的扫描和缓存类
+	 */
+	private Scan scan;
+	
+	/**
+	 * 词法分析器类的构造方法 
+	 * @param filename 文件位置和文件名
+	 */
+	public LexicalAnalyzer(String filename){
+		this.scan = new Scan(filename);
+	}
+	
+	/**
+	 * 通过语法分析获得Token序列
+	 * @return Token序列
+	 */
+	public ArrayList<Token> getTokenList(){
+		ArrayList<Token> result = new ArrayList<Token>();
+		int index = 0;
+		while(index < scan.getLength()){
+			Token token = analyze(index);
+			index = scan.getIndex();
+		}
+		this.scan.retract(scan.getLength()-1);
+		return result;
+	}
+	
+	/**
+	 * 对某一位置进行词法分析
+	 * @param index 字母开始的位置
+	 * @return
+	 */
+	public Token analyze(int index){
+		return null;
+	}
+}
