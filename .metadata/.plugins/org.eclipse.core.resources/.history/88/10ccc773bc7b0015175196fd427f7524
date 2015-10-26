@@ -1,0 +1,6 @@
+package lex;
+
+public class Token {
+	public int type;
+	public String value;
+}

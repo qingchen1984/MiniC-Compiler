@@ -1,0 +1,11 @@
+package lex;
+
+public class LexicalAnalyzer {
+	
+	private Scan scan;
+	
+	public LexicalAnalyzer(){
+		
+	}
+	
+}
