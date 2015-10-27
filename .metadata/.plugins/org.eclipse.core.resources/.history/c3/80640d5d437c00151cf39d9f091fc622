@@ -83,16 +83,6 @@ public class LexicalAnalyzer {
 		return result;
 	}
 	
-	/*
-	 * 关键字
-	 */
-	private String[] keyword ={
-		"auto","double","int","struct","break","else","long","switch",
-		"case","enum","register","typedef","char","return","union","const",
-		"extern","float","short","unsigned","continue","for","signed","void",
-		"default","goto","sizeof","volatile","do","if","static","while"
-	};
-
 	/**
 	 * 对某一位置进行词法分析
 	 * @param index 字母开始的位置
@@ -100,27 +90,20 @@ public class LexicalAnalyzer {
 	 */
 	public Token analyze(int index){
 		int length = scan.getLength();
-		int type = -1;
+		int type = 0;
 		String value = "";
 		while(index < length){
 			char ch = scan.getNextChar();
 			index++;
 			char ch1 = '\0';
 			if(isDigit(ch)){
-				if(Type.isCalc(type)){
-					scan.retract(1);
-					break;
-				}
 				
 			} else if (isLetter(ch)){
-				if(Type.isCalc(type)){
-					scan.retract(1);
-					break;
-				}
+				
 			} else {
 				switch(ch){
 				case '='://==,=
-					if(type == -1){
+					if(type == 0){
 						type = Type.ASSIGN;
 						value = "=";
 					} else if(type == Type.LT){//<=
@@ -131,118 +114,26 @@ public class LexicalAnalyzer {
 						
 					} else if(type == Type.NOT){//!=
 						
-					} else if(type == Type.ADD){//+=
-						
-					} else if(type == Type.SUB){//-=
-						
-					} else if(type == Type.DIV){///=
-						
-					} else if(type == Type.MUL){//*=
-						
 					}
 					break;
 				case '+':
-					if(type == -1){
-						
-					} else if(type == Type.ADD){//++
-						
-					} 
-					break;
 				case '-':
-					if(type == -1){
-						
-					} else if(type == Type.SUB){//--
-						
-					}
-					break;
 				case '*':
-					if(type == -1){
-						
-					}
-					break;
 				case '/':
-					if(type == -1){
-						
-					}
-					break;
 				case '<':
-					if(type == -1){
-						
-					}
-					break;
 				case '>':
-					if(type == -1){
-						
-					}
-					break;
 				case '!':
-					if(type == -1){
-						
-					}
-					break;
 				case '|':
-					if(type == -1){
-						
-					} else if(type == Type.OR_1){
-						
-					}
-					break;
 				case '&':
-					if(type == -1){
-						
-					} else if(type == Type.AND_1){
-						
-					}
-					break;
 				case ';':
-					if(type == -1){
-						
-					}
-					break;
 				case '{':
-					if(type == -1){
-						
-					}
-					break;
 				case '}':
-					if(type == -1){
-						
-					}
-					break;
 				case '[':
-					if(type == -1){
-						
-					}
-					break;
 				case ']':
-					if(type == -1){
-						
-					}
-					break;
 				case '(':
-					if(type == -1){
-						
-					}
-					break;
 				case ')':
-					if(type == -1){
-						
-					}
-					break;
 				case '#':
-					if(type == -1){
-						
-					}
-					break;
-				case ',':
-					if(type == -1){
-						
-					}
-					break;
 				default:
-					break;
-				}
-				if(!Type.isCalc(type)){
 					break;
 				}
 			}
@@ -266,5 +157,4 @@ public class LexicalAnalyzer {
 			return false;
 		}
 	}
-	
 }

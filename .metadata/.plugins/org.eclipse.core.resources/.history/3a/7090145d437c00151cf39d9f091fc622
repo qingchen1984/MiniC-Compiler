@@ -65,13 +65,6 @@ public class Type {
 	/*标识符和数字*/
 	public static final int ID = 59;
 	public static final int NUM = 60;
-	/*补充*/
-	public static final int INCREASEBY = 61;//+=
-	public static final int DECREASEBY = 62;//-=
-	public static final int MULBY = 63;//*=
-	public static final int DIVBY = 64;///=
-	
-	public static final int MUL = 65;//*
 	
 	/**
 	 * 判断是否为计算型的符号
@@ -79,6 +72,15 @@ public class Type {
 	 * @return
 	 */
 	public static boolean isCalc(int type){
+		return false;
+	}
+	
+	/**
+	 * 判断是否为分割符
+	 * @param type
+	 * @return
+	 */
+	public static boolean isDiv(int type){
 		return false;
 	}
 }
