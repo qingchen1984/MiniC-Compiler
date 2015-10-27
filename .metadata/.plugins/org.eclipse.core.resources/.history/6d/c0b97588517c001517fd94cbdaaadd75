@@ -106,16 +106,10 @@ public class LexicalAnalyzer {
 			char ch = scan.getNextChar();
 			index++;
 			char ch1 = '\0';
-			if(isDigit(ch)){//判断是否为一个数字
+			if(isDigit(ch)){
 				if(Type.isCalc(type)){
 					scan.retract(1);
 					break;
-				}
-				if(value == ""){
-					value = new Character(ch).toString();
-					type = Type.NUM;
-				} else {
-					value += new Character(ch).toString();
 				}
 				
 			} else if (isLetter(ch)){
@@ -123,180 +117,126 @@ public class LexicalAnalyzer {
 					scan.retract(1);
 					break;
 				}
-				String str = scan.getSubStr(index-1, 9);
-				String val = null;
-				for(int i = 0;i < keyword.length;i++){
-					if(str.startsWith(keyword[i])){
-						val = keyword[i];
-						type = i;
-						break;
-					}
-				}
-				if(val == null){
-					type = Type.ID;
-					if(value == ""){
-						value = new Character(ch).toString();
-					} else {
-						value += new Character(ch).toString();
-					}
-				} else {
-					value = val;
-				}
-				
 			} else {
-				if(type == Type.NUM || type == Type.ID){
-					scan.retract(1);
-					return new Token(type,value);
-				}
 				switch(ch){
 				case '='://==,=
 					if(type == -1){
 						type = Type.ASSIGN;
 						value = "=";
 					} else if(type == Type.LT){//<=
-						type = Type.LE;
-						value = "<=";
+						
 					} else if(type == Type.GT){//>=
-						type = Type.GE;
-						value = ">=";
+						
 					} else if(type == Type.ASSIGN){//==
-						type = Type.EQUAL;
-						value = "==";
+						
 					} else if(type == Type.NOT){//!=
-						type = Type.NE;
-						value = "!=";
+						
 					} else if(type == Type.ADD){//+=
-						type = Type.INCREASEBY;
-						value = "+=";
+						
 					} else if(type == Type.SUB){//-=
-						type = Type.DECREASEBY;
-						value = "-=";
+						
 					} else if(type == Type.DIV){///=
-						type = Type.DIVBY;
-						value = "/=";
+						
 					} else if(type == Type.MUL){//*=
-						type = Type.MULBY;
-						value = "*=";
+						
 					}
 					break;
 				case '+':
 					if(type == -1){
-						type = Type.ADD;
-						value = "+";
+						
 					} else if(type == Type.ADD){//++
-						type = Type.INCREASE;
-						value = "++";
+						
 					} 
 					break;
 				case '-':
 					if(type == -1){
-						type = Type.SUB;
-						value = "-";
+						
 					} else if(type == Type.SUB){//--
-						type = Type.DECREASEBY;
-						value = "--";
+						
 					}
 					break;
 				case '*':
 					if(type == -1){
-						type = Type.MUL;
-						value = "*";
+						
 					}
 					break;
 				case '/':
 					if(type == -1){
-						type = Type.DIV;
-						value = "/";
+						
 					}
 					break;
 				case '<':
 					if(type == -1){
-						type = Type.LT;
-						value = "<";
+						
 					}
 					break;
 				case '>':
 					if(type == -1){
-						type = Type.GT;
-						value = ">";
+						
 					}
 					break;
 				case '!':
 					if(type == -1){
-						type = Type.NOT;
-						value = "!";
+						
 					}
 					break;
 				case '|':
 					if(type == -1){
-						type = Type.OR_1;
-						value = "|";
+						
 					} else if(type == Type.OR_1){
-						type = Type.OR_2;
-						value = "||";
+						
 					}
 					break;
 				case '&':
 					if(type == -1){
-						type = Type.AND_1;
-						value = "&";
+						
 					} else if(type == Type.AND_1){
-						type = Type.AND_2;
-						value = "&&";
+						
 					}
 					break;
 				case ';':
 					if(type == -1){
-						type = Type.SEMICOLON;
-						value = ";";
+						
 					}
 					break;
 				case '{':
 					if(type == -1){
-						type = Type.BRACE_L;
-						value = "{";
+						
 					}
 					break;
 				case '}':
 					if(type == -1){
-						type = Type.BRACE_R;
-						value = "}";
+						
 					}
 					break;
 				case '[':
 					if(type == -1){
-						type = Type.BRACKET_L;
-						value = "[";
+						
 					}
 					break;
 				case ']':
 					if(type == -1){
-						type = Type.BRACKET_R;
-						value = "]";
+						
 					}
 					break;
 				case '(':
 					if(type == -1){
-						type = Type.PARENTHESIS_L;
-						value = "(";
+						
 					}
 					break;
 				case ')':
 					if(type == -1){
-						type = Type.PARENTHESIS_R;
-						value = ")";
+						
 					}
 					break;
 				case '#':
 					if(type == -1){
-						type = Type.POUND;
-						value = "#";
+						
 					}
 					break;
 				case ',':
 					if(type == -1){
-						type = Type.COMMA;
-						value = ",";
+						
 					}
 					break;
 				default:
