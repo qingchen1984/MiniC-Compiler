@@ -1,0 +1,34 @@
+package parser;
+
+public class LRDerivation {
+	
+	public Derivation d;
+	public String lr;
+	public int index;
+	
+	public LRDerivation(Derivation d,String lr,int index){
+		this.d = d;
+		this.lr = lr;
+		this.index = index;
+	}
+	
+	public String toString(){
+		String result = d.left+"->";
+		int length = d.list.size();
+		for(int i = 0;i < length;i++){
+			result += " ";
+			if(i == index){
+				result += "¡¤";
+			}
+			result += d.list.get(i);
+		}
+		result += " ,";
+		result += lr;
+		return result;
+	}
+	
+	public void print(){
+		System.out.println(this.toString());
+	}
+
+}

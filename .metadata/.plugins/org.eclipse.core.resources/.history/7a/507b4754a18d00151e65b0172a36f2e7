@@ -1,0 +1,25 @@
+package parser;
+
+import java.util.ArrayList;
+
+public class DFA {
+	
+	private ArrayList<DFAState> states = new ArrayList<DFAState>();
+	
+	public DFA(ArrayList<DFAState> states){
+		this.states = states;
+	}
+	
+	public DFAState get(int i){
+		return states.get(i);
+	}
+	
+	public void printAllStates(){
+		int size = states.size();
+		for(int i = 0;i < size;i++){
+			System.out.println("I"+i+":");
+			states.get(i).print();
+		}
+	}
+
+}

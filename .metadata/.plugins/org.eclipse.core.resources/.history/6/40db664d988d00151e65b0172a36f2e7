@@ -1,0 +1,13 @@
+package parser;
+
+import java.util.ArrayList;
+
+public class DFA {
+	
+	public ArrayList<DFAState> states = new ArrayList<DFAState>();
+	
+	public DFA(ArrayList<DFAState> states){
+		this.states = states;
+	}
+
+}

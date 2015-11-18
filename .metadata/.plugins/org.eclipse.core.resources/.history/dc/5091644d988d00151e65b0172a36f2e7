@@ -1,0 +1,15 @@
+package parser;
+
+public class LRDerivation {
+	
+	public Derivation d;
+	public String lr;
+	public int index;
+	
+	public LRDerivation(Derivation d,String lr,int index){
+		this.d = d;
+		this.lr = lr;
+		this.index = index;
+	}
+
+}

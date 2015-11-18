@@ -1,0 +1,15 @@
+package parser;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class CFGAnalysis {
+	
+	public  read(String filename) throws FileNotFoundException{
+		File file = new File("Input/"+filename);
+		Scanner scanner = new Scanner(file);
+		while
+	}
+
+}

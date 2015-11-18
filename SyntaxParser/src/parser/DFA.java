@@ -1,0 +1,37 @@
+package parser;
+
+import java.util.ArrayList;
+
+public class DFA {
+	
+	public ArrayList<DFAState> states = new ArrayList<DFAState>();
+	
+	public DFA(ArrayList<DFAState> states){
+		this.states = states;
+	}
+	
+	public DFAState get(int i){
+		return states.get(i);
+	}
+	
+	public int size(){
+		return states.size();
+	}
+	
+	public int contains(DFAState state){
+		if(states.contains(state)){
+			return states.indexOf(state);
+		} else {
+			return -1;
+		}
+	}
+	
+	public void printAllStates(){
+		int size = states.size();
+		for(int i = 0;i < size;i++){
+			System.out.println("I"+i+":");
+			states.get(i).print();
+		}
+	}
+
+}

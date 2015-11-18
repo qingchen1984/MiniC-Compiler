@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;lex&apos; to &apos;SyntaxParser/src&apos;&#x0D;&#x0A;- Original project: &apos;LexicalAnalyzer&apos;&#x0D;&#x0A;- Destination element: &apos;SyntaxParser/src&apos;&#x0D;&#x0A;- Original element: &apos;LexicalAnalyzer/src/lex&apos;" description="Copy package" destination="=SyntaxParser/src" element1="/src&lt;lex" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1447765716669" version="1.0"/>
+</session>

@@ -1,0 +1,138 @@
+package parser;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class AnalyzeTable {
+	
+	public static String error = "X";
+	public static String acc = "acc";
+	
+	private DFA dfa;
+	
+	private String[] actionCol;
+	private String[] gotoCol;
+	public int actionLength;
+	public int gotoLength;
+	public int stateNum;
+	
+	private String[][] content;
+	
+	public AnalyzeTable(){
+		createTable();//建表
+		this.actionLength = actionCol.length;
+		this.gotoLength = gotoCol.length;
+		createDFA();//创建DFA
+		this.stateNum = dfa.size();
+		this.content = new String[actionLength+gotoLength][stateNum];
+		createAnalyzeTable();//填充语法分析表的相关内容
+	}
+	
+	/**
+	 * 利用这个方法建立一个LR(1)语法分析表
+	 */
+	private void createTable(){
+		//以下是建立一个表的列
+		this.actionCol = new String[CFG.VT.size()];
+		this.gotoCol = new String[CFG.VN.size()];
+		Iterator<String> iter1 = CFG.VT.iterator();
+		Iterator<String> iter2 = CFG.VN.iterator();
+		int i = 0;
+		int j = 0;
+		while(iter1.hasNext()){
+			String vt = iter1.next();
+			if(!vt.equals(CFG.emp)){
+				actionCol[i] = vt;
+				i++;
+			}
+		}
+		actionCol[i] = "$";
+		while(iter2.hasNext()){
+			String vn = iter2.next();
+			gotoCol[j] = vn;
+			j++;
+		}
+	}
+	
+	private ArrayList<DFAState> stateList = new ArrayList<DFAState>();//用于下列递归方法的一个公共的容器
+	private ArrayList<Integer> gotoStart = new ArrayList<Integer>();
+	private ArrayList<Integer> gotoEnd = new ArrayList<Integer>();
+	private ArrayList<String> gotoPath = new ArrayList<String>();
+	/**
+	 * 利用这个递归方法建立一个用于语法分析的DFA
+	 */
+	private void createDFA(){
+		DFAState state0 = new DFAState(0);
+		ArrayList<Derivation> dList = getDerivation("S'");
+		for(Derivation d:dList){
+			ArrayList<String> first = first(d.list.get(0));
+			for(String s:first){
+				LRDerivation lrd = new LRDerivation(d,s,0);
+				state0.addNewDerivation(lrd);
+			}
+		}
+		this.dfa = new DFA(stateList);
+	}
+	
+	private void addState(ArrayList<LRDerivation> list){
+		
+	}
+	
+	/**
+	 * 用于获取与一个文法符号相关的产生式
+	 * @param v
+	 * @return
+	 */
+	public ArrayList<Derivation> getDerivation(String v){
+		ArrayList<Derivation> result = new ArrayList<Derivation>();
+		Iterator<Derivation> iter = CFG.F.iterator();
+		while(iter.hasNext()){
+			Derivation d = iter.next();
+			if(d.left.equals(v)){
+				result.add(d);
+			}
+		}
+		return result;
+	}
+	
+	public static void main(String[] args){
+		System.out.println(new AnalyzeTable().getDerivation("S").get(0));
+	}
+	
+	/**
+	 * 用于获取一个文法符号的first
+	 * @param v
+	 * @return
+	 */
+	private ArrayList<String> first(String v){
+		ArrayList<String> result = new ArrayList<String>();
+		Iterator<String> iter = CFG.firstMap.get(v).iterator();
+		while(iter.hasNext()){
+			result.add(iter.next());
+		}
+		return result;
+	}
+	
+	/**
+	 * 利用这个方法填充语法分析表的相关内容
+	 */
+	private void createAnalyzeTable(){
+		
+	}
+	
+	public String ACTION(int stateIndex,String vt){
+		return null;
+	}
+	
+	public String GOTO(int stateIndex,String vn){
+		return null;
+	}
+	
+	/**
+	 * 打印语法分析表
+	 */
+	public void print(){
+		
+	}
+
+}

@@ -1,0 +1,31 @@
+package parser;
+
+import java.util.HashSet;
+import java.util.Iterator;
+
+public class DFAState {
+	
+	public int id ;
+	public HashSet<LRDerivation> set = new HashSet<LRDerivation>();
+	
+	public DFAState(int id){
+		this.id = id;
+	}
+	
+	public boolean addNewDerivation(LRDerivation d){
+		if(set.contains(d)){
+			return false;
+		} else {
+			set.add(d);
+			return true;
+		}
+	}
+	
+	public void print(){
+		Iterator<LRDerivation> iter = set.iterator();
+		while(iter.hasNext()){
+			iter.next().print();
+		}
+	}
+
+}

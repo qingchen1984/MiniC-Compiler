@@ -1,0 +1,23 @@
+package parser;
+
+import java.util.HashSet;
+
+public class DFAState {
+	
+	public int id ;
+	public HashSet<Derivation> set = new HashSet<Derivation>();
+	
+	public DFAState(int id){
+		this.id = id;
+	}
+	
+	public boolean addNewDerivation(Derivation d){
+		if(set.contains(d)){
+			return false;
+		} else {
+			set.add(d);
+			return true;
+		}
+	}
+
+}

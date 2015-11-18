@@ -1,0 +1,22 @@
+package parser;
+
+import java.util.ArrayList;
+
+import lex.LexicalAnalyzer;
+import lex.Token;
+
+public class SyntaxParser {
+	
+	private LexicalAnalyzer lex;//´Ê·¨·ÖÎöÆ÷
+	private ArrayList<Token> tokenList;
+	private int length;
+	private int index;
+	
+	public SyntaxParser(String filename){
+		this.lex = new LexicalAnalyzer(filename);
+		this.tokenList = lex.getTokenList();
+		this.length = this.tokenList.size();
+		this.index = 0;
+	}
+
+}

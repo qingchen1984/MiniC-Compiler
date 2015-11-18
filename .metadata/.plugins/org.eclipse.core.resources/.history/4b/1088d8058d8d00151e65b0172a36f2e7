@@ -1,0 +1,51 @@
+package parser;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
+
+public class CFG {
+	
+	public static char emp = 'ε';
+	
+	public static ArrayList<String> keywords = new ArrayList<String>();//保留字集
+	
+	public static ArrayList<String> VN = new ArrayList<String>();//非终结符集
+	public static ArrayList<String> VT = new ArrayList<String>();//终结符集
+	public static ArrayList<Derivation> F = new ArrayList<Derivation>();//产生式集
+	public static HashMap<String,ArrayList<String> > firstMap = new HashMap<String,ArrayList<String> >();//非终结符的first
+	public static HashMap<String,ArrayList<String> > followMap = new HashMap<String,ArrayList<String> >();//非终结符的follow
+	
+	static{
+		try {
+			read("cfg.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void read(String filename) throws FileNotFoundException{
+		File file = new File("Input/"+filename);
+		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext()){
+			String line = scanner.nextLine();
+			String[] div = line.split("->");
+			String[] right = div[1].split("|");
+			for(String r:right){
+				Derivation derivation = new Derivation(div[0]+"->"+r);
+				F.add(derivation);
+			}
+		}
+	}
+	
+	public static void main(String[] args){
+		String str = "S->if B S;|if B S ; else S ;|<id> = E|S ; S";
+		String[] e = str.split("|");
+		for(String s:e){
+			System.out.println(s);
+		}
+	}
+
+}

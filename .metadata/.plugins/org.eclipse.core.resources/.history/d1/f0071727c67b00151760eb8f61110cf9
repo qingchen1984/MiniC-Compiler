@@ -1,7 +1,0 @@
-package lex;
-
-public class Type {
-	
-	public static final int S=2;
-
-}

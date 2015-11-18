@@ -1,0 +1,133 @@
+package parser;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.TreeSet;
+
+public class CFG {
+	
+	public static char emp = 'ε';
+	
+	public static TreeSet<String> keywords = new TreeSet<String>();//保留字集
+	
+	public static TreeSet<String> VN = new TreeSet<String>();//非终结符集
+	public static TreeSet<String> VT = new TreeSet<String>();//终结符集
+	public static ArrayList<Derivation> F = new ArrayList<Derivation>();//产生式集
+	
+	public static HashMap<String,TreeSet<String> > firstMap = new HashMap<String,TreeSet<String> >();//first
+	public static HashMap<String,TreeSet<String> > followMap = new HashMap<String,TreeSet<String> >();//follow
+	
+	static{
+		//从文件中读取文法，添加相应的产生式
+		try {
+			read("cfg.txt");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		//添加C语言的保留字
+		String[] keyword ={
+				"auto","double","int","struct","break","else","long","switch",
+				"case","enum","register","typedef","char","return","union","const",
+				"extern","float","short","unsigned","continue","for","signed","void",
+				"default","goto","sizeof","volatile","do","if","static","while"
+		};
+		for(String k:keyword){
+			keywords.add(k);
+		}
+		//添加非终结符
+		VN.add("S'");VN.add("S");VN.add("B");VN.add("E");
+		//添加终结符
+		VT.add("if");VT.add("else");VT.add(";");VT.add(">=");VT.add("=");
+		VT.add("<num>");VT.add("<id>");VT.add("+");VT.add("*");
+		VT.addAll(keywords);VT.add(String.valueOf(CFG.emp));
+		
+		addFirst();
+	}
+	
+	/**
+	 * 从文件中读取文法
+	 * @param filename
+	 * @throws FileNotFoundException
+	 */
+	private static void read(String filename) throws FileNotFoundException{
+		File file = new File("Input/"+filename);
+		Scanner scanner = new Scanner(file);
+		while(scanner.hasNext()){
+			String line = scanner.nextLine();
+			String[] div = line.split("->");
+			String[] right = div[1].split("\\|");
+			for(String r:right){
+				Derivation derivation = new Derivation(div[0]+"->"+r);
+				F.add(derivation);
+			}
+		}
+		scanner.close();
+	}
+	
+	/**
+	 * 计算所有符号的first集合
+	 */
+	private static void addFirst(){
+		//将所有的终结符的first都设为本身
+		Iterator<String> iterVT = VT.iterator();
+		while(iterVT.hasNext()){
+			String vt = iterVT.next();
+			firstMap.put(vt,new TreeSet<String>());
+			firstMap.get(vt).add(vt);
+		}
+		//计算所有非终结符的first集合
+		Iterator<String> iterVN = VN.iterator();
+		while(iterVN.hasNext()){
+			String vn = iterVN.next();
+			firstMap.put(vn, new TreeSet<String>());
+			int dSize = F.size();
+			for(int i = 0;i < dSize;i++){
+				Derivation d = F.get(i);
+				if(d.left.equals(vn)){
+					if(VT.contains(d.list.get(0))){
+						firstMap.get(vn).add(d.list.get(0));
+					} else {
+						firstMap.get(vn).addAll(findFirst(d.list.get(0)));//用一个递归函数查找first
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 一个用于查找first的递归函数
+	 * @param vn
+	 * @return
+	 */
+	private static TreeSet<String> findFirst(String vn){
+		TreeSet<String> set = new TreeSet<String>();
+		if(VT.contains(vn)){
+			set.add(vn);
+		} else {
+			for(Derivation d:F){
+				if(d.left.equals(vn)){
+					if(VT.contains(d.list.get(0))){
+						set.add(d.list.get(0));
+					} else {
+						//set.addAll(findFirst(d.list.get(0)));
+					}
+				}
+			}
+		}
+		return set;
+	}
+	
+	
+	public static void main(String[] args){
+		TreeSet<String> set = firstMap.get("S");
+		Iterator<String> iter = set.iterator();
+		while(iter.hasNext()){
+			System.out.println(iter.next());
+		}
+	}
+
+}

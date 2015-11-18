@@ -1,0 +1,21 @@
+package parser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class CFG {
+	
+	public static char emp = 'ε';
+	
+	public static ArrayList<String> keywords = new ArrayList<String>();//保留字集
+	
+	public static ArrayList<String> VN = new ArrayList<String>();//非终结符集
+	public static ArrayList<String> VT = new ArrayList<String>();//终结符集
+	public static ArrayList<String> F = new ArrayList<String>();//产生式集
+	public static HashMap<String,ArrayList<String> > firstMap = new HashMap<String,ArrayList<String> >();//非终结符的first
+	public static HashMap<String,ArrayList<String> > followMap = new HashMap<String,ArrayList<String> >();//非终结符的follow
+	
+	private String vn;//产生式左端的非终结符
+	private ArrayList<String> f = new ArrayList<String>();
+
+}
