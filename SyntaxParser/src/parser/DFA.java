@@ -6,10 +6,6 @@ public class DFA {
 	
 	public ArrayList<DFAState> states = new ArrayList<DFAState>();
 	
-	public DFA(ArrayList<DFAState> states){
-		this.states = states;
-	}
-	
 	public DFAState get(int i){
 		return states.get(i);
 	}
@@ -19,11 +15,12 @@ public class DFA {
 	}
 	
 	public int contains(DFAState state){
-		if(states.contains(state)){
-			return states.indexOf(state);
-		} else {
-			return -1;
+		for(int i = 0;i <states.size();i++){
+			if(states.get(i).equals(state)){
+				return i;
+			}
 		}
+		return -1;
 	}
 	
 	public void printAllStates(){
@@ -32,6 +29,10 @@ public class DFA {
 			System.out.println("I"+i+":");
 			states.get(i).print();
 		}
+	}
+	
+	public DFA(){
+		
 	}
 
 }

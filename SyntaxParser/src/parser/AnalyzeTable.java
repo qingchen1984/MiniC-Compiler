@@ -8,7 +8,7 @@ public class AnalyzeTable {
 	public static String error = "X";
 	public static String acc = "acc";
 	
-	private DFA dfa;
+	public DFA dfa;
 	
 	private String[] actionCol;
 	private String[] gotoCol;
@@ -57,7 +57,7 @@ public class AnalyzeTable {
 		}
 	}
 	
-	private ArrayList<DFAState> stateList = new ArrayList<DFAState>();//用于下列递归方法的一个公共的容器
+	//private ArrayList<DFAState> stateList = new ArrayList<DFAState>();//用于下列递归方法的一个公共的容器
 	private ArrayList<Integer> gotoStart = new ArrayList<Integer>();
 	private ArrayList<Integer> gotoEnd = new ArrayList<Integer>();
 	private ArrayList<String> gotoPath = new ArrayList<String>();
@@ -66,11 +66,11 @@ public class AnalyzeTable {
 	 * 不再有项集可插入的判定标准为:
 	 */
 	private void createDFA(){
+		this.dfa = new DFA();
 		DFAState state0 = new DFAState(0);
-		stateList.add(state0);
-		stateList.get(0).addNewDerivation(new LRDerivation(getDerivation("S'").get(0),"$",0));//首先加入S'->·S,$
-		for(int i = 0;i < stateList.get(0).set.size();i++){
-			LRDerivation lrd = stateList.get(0).set.get(i);
+		state0.addNewDerivation(new LRDerivation(getDerivation("S'").get(0),"$",0));//首先加入S'->·S,$
+		for(int i = 0;i < state0.set.size();i++){
+			LRDerivation lrd = state0.set.get(i);
 			if(lrd.index < lrd.d.list.size()){
 				String A = lrd.d.list.get(lrd.index);//获取·后面的文法符号
 				String b = null;//紧跟A的一项+a
@@ -85,19 +85,19 @@ public class AnalyzeTable {
 					for(int j=0,length1=dA.size();j<length1;j++){
 						for(int k=0,length2=firstB.size();k<length2;k++){
 							LRDerivation lrd1 = new LRDerivation(dA.get(j),firstB.get(k),0);
-							stateList.get(0).addNewDerivation(lrd1);
+							state0.addNewDerivation(lrd1);
 						}
 					}
 				}
 			}
 		}
+		dfa.states.add(state0);
 		//state0建立成功后开始递归建立其他的状态
-		ArrayList<String> gotoPath = stateList.get(0).getGotoPath();
+		ArrayList<String> gotoPath = state0.getGotoPath();
 		for(String path:gotoPath){
-			ArrayList<LRDerivation> list = stateList.get(0).getLRDs(path);//直接通过路径传到下一个状态的情况
+			ArrayList<LRDerivation> list = state0.getLRDs(path);//直接通过路径传到下一个状态的情况
 			addState(0,path,list);//开始进行递归，建立用于分析的DFA
 		}
-		this.dfa = new DFA(stateList);
 	}
 	
 	/**
@@ -107,33 +107,49 @@ public class AnalyzeTable {
 	 * @param lastState 上一个状态的编号
 	 */
 	private void addState(int lastState,String path,ArrayList<LRDerivation> list){
-//		System.out.println(lastState+" "+path+" "+list.toString());TODO
-		DFAState temp = new DFAState(stateList.size());//初始化
-		for(LRDerivation lrd:list){//逐个分析LR(1)产生式
-			String next = null;
-			if(lrd.index+1==lrd.d.list.size()){
-				next = lrd.lr;
-			} else {
-				next = lrd.d.list.get(lrd.index+1);
-			}
-			ArrayList<String> first = first(next);
-			for(String s:first){
-				LRDerivation newLrd = new LRDerivation(lrd.d,s,lrd.index+1);
-				temp.addNewDerivation(newLrd);
-			}
+		DFAState temp = new DFAState(0);
+		for(int i = 0;i < list.size();i++){
+			list.get(i).index++;
+			temp.addNewDerivation(list.get(i));
 		}
-		if(!stateList.contains(temp)){
-			stateList.add(temp);
-			gotoStart.add(lastState);
-			gotoEnd.add(temp.id);
-			gotoPath.add(path);
-			ArrayList<String> newPath = temp.getGotoPath();
-			if(newPath.size()!=0){
-				for(String p:newPath){
-					ArrayList<LRDerivation> newList = temp.getLRDs(p);
-					addState(temp.id,p,newList);//进一步递归
+		for(int i = 0;i < temp.set.size();i++){
+			if(temp.set.get(i).d.list.size() != temp.set.get(i).index){
+				String A = temp.set.get(i).d.list.get(temp.set.get(i).index);
+				String B = null;
+				if(temp.set.get(i).index+1 == temp.set.get(i).d.list.size()){
+					B = temp.set.get(i).lr;
+				} else {
+					B = temp.set.get(i).d.list.get(temp.set.get(i).index+1);
+				}
+				ArrayList<Derivation> dA = getDerivation(A);
+				ArrayList<String> firstB = first(B);
+				for(int j = 0;j < dA.size();j++){
+					for(int k = 0;k < firstB.size();k++){
+						LRDerivation lrd = new LRDerivation(dA.get(j),firstB.get(k),0);
+						if(!temp.contains(lrd)){
+							temp.addNewDerivation(lrd);
+						}
+					}
 				}
 			}
+		}
+		for(int i = 0;i < dfa.states.size();i++){
+			if(dfa.states.get(i).equalTo(temp)){
+				gotoStart.add(lastState);
+				gotoEnd.add(i);
+				gotoPath.add(path);
+				return;
+			}
+		}
+		temp.id = dfa.states.size();
+		dfa.states.add(temp);
+		gotoStart.add(lastState);
+		gotoEnd.add(temp.id);
+		gotoPath.add(path);
+		ArrayList<String> gotoPath = temp.getGotoPath();
+		for(String p:gotoPath){
+			ArrayList<LRDerivation> l = temp.getLRDs(p);//直接通过路径传到下一个状态的情况
+			addState(temp.id,p,l);
 		}
 	}
 	
@@ -212,7 +228,7 @@ public class AnalyzeTable {
 					String next = lrd.d.list.get(lrd.index);//获取·后面的文法符号
 					if(CFG.VT.contains(next)){//必须是一个终结符号
 						if(gotoTable[i][gotoIndex(next)] != -1){
-							actionTable[i][actionIndex(next)] = "移入"+gotoTable[i][gotoIndex(next)];
+							actionTable[i][actionIndex(next)] = "s"+gotoTable[i][gotoIndex(next)];
 						}
 					}
 				}
@@ -262,7 +278,7 @@ public class AnalyzeTable {
 	 * 打印语法分析表
 	 */
 	public void print(){
-		String colLine = "\t";
+		String colLine = "";
 		for(int i = 0;i < actionCol.length;i++){
 			colLine += "\t";
 			colLine += actionCol[i];
@@ -274,15 +290,21 @@ public class AnalyzeTable {
 		System.out.println(colLine);
 		int index = 0;
 		for(int i = 0;i < dfa.states.size();i++){
-			String line = "\t"+i;
+			String line = String.valueOf(i);
 			while(index < actionCol.length){
 				line += "\t";
-				line += actionTable[index];
+				line += actionTable[i][index];
+				index++;
 			}
 			index = 0;
 			while(index < gotoCol.length){
 				line += "\t";
-				line += gotoTable[index];
+				if(gotoTable[i][index] == -1){
+					line += "X";
+				} else {
+					line += gotoTable[i][index];
+				}
+				index++;
 			}
 			index = 0;
 			line += "\t";
@@ -292,12 +314,6 @@ public class AnalyzeTable {
 	
 	public int getStateNum(){
 		return dfa.states.size();
-	}
-	
-	public static void main(String[] args){
-		AnalyzeTable table = new AnalyzeTable();
-		System.out.println(table.getStateNum());
-		table.dfa.printAllStates();
 	}
 
 }

@@ -1,0 +1,101 @@
+package parser;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+
+public class DFAState {
+	
+	public int id ;
+	public ArrayList<LRDerivation> set = new ArrayList<LRDerivation>();
+	
+	public DFAState(int id){
+		this.id = id;
+	}
+	
+	public boolean addNewDerivation(LRDerivation d){
+		if(contains(d)){
+			return false;
+		} else {
+			set.add(d);
+			return true;
+		}
+	}
+	
+	public void print(){
+		Iterator<LRDerivation> iter = set.iterator();
+		while(iter.hasNext()){
+			iter.next().print();
+		}
+	}
+	
+	public boolean contains(LRDerivation lrd){
+		for(LRDerivation l:set){
+			if(l.equals(lrd)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean equals(DFAState state){
+		if(contains(set,state.set)&&contains(state.set,set)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean contains(ArrayList<LRDerivation> set1,ArrayList<LRDerivation> set2){
+		for(int i = 0;i < set2.size();i++){
+			if(!contain(set1,set2.get(i))){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean contain(ArrayList<LRDerivation> set,LRDerivation lrd){
+		for(LRDerivation l:set){
+			if(l.equals(lrd)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public ArrayList<String> getGotoPath(){
+		ArrayList<String> result = new ArrayList<String>();
+		for(LRDerivation lrd:set){
+			if(lrd.d.list.size()==lrd.index){
+				continue;
+			}
+			String s = lrd.d.list.get(lrd.index);
+			if(!result.contains(s)){
+				result.add(s);
+			}
+		}
+		return result;
+	}
+	
+	public void printPath(){
+		for(String s:this.getGotoPath()){
+			System.out.print(s+" ");
+		}
+		System.out.println();
+	}
+	
+	public ArrayList<LRDerivation> getLRDs(String s){
+		ArrayList<LRDerivation> result = new ArrayList<LRDerivation>();
+		for(LRDerivation lrd:set){
+			if(lrd.d.list.size() != lrd.index){
+				String s1 = lrd.d.list.get(lrd.index);
+				if(s1.equals(s)){
+					result.add(lrd);
+				}
+			}
+		}
+		return result;
+	}
+
+}

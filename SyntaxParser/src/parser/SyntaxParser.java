@@ -19,14 +19,25 @@ public class SyntaxParser {
 	
 	private Error error = null;
 	
+	public static void main(String[] args){
+		SyntaxParser parser = new SyntaxParser("source.c");
+		parser.analyze();
+	}
+	
 	public SyntaxParser(String filename){
 		this.lex = new LexicalAnalyzer(filename);
 		this.tokenList = lex.getTokenList();
+		this.tokenList.add(new Token(-1,"$"));
 		this.length = this.tokenList.size();
 		this.index = 0;
 		this.table = new AnalyzeTable();
 		this.stateStack = new Stack<Integer>();
 		this.stateStack.push(0);
+		this.table.dfa.printAllStates();
+		this.table.print();
+		for(int i = 0;i < tokenList.size();i++){
+			System.out.println(tokenList.get(i).toString());
+		}
 	}
 	
 	public Token readToken(){
@@ -44,6 +55,7 @@ public class SyntaxParser {
 			String value = getValue(valueType);
 			int state = stateStack.lastElement();
 			String action = table.ACTION(state, value);
+			System.out.println(action);
 			if(action.startsWith("s")){
 				int newState = Integer.parseInt(action.substring(1));
 				stateStack.push(newState);
@@ -51,6 +63,7 @@ public class SyntaxParser {
 				System.out.print("状态表:"+stateStack.toString()+"\t");
 				System.out.print("输入:");
 				printInput();
+				System.out.println();
 				System.out.println();
 			} else if(action.startsWith("r")){
 				Derivation derivation = CFG.F.get(Integer.parseInt(action.substring(1)));
@@ -67,7 +80,11 @@ public class SyntaxParser {
 				printInput();
 				System.out.println();
 			} else if(action.equals(AnalyzeTable.acc)){
-				System.out.println("语法分析完成!");
+				System.out.print("语法分析完成"+"\t");
+				System.out.print("状态表:"+stateStack.toString()+"\t");
+				System.out.print("输入:");
+				printInput();
+				System.out.println();
 				return;
 			} else {
 				error();
@@ -99,6 +116,16 @@ public class SyntaxParser {
 			return "else";
 		case Type.SEMICOLON:
 			return ";";
+		case Type.PARENTHESIS_L:
+			return "(";
+		case Type.PARENTHESIS_R:
+			return ")";
+		case Type.GE:
+			return ">=";
+		case Type.ASSIGN:
+			return "=";
+		case -1:
+			return "$";
 		default:
 			return null;
 		}
@@ -107,9 +134,7 @@ public class SyntaxParser {
 	 * 出错
 	 */
 	public void error(){
-		if(error != null){
-			System.out.println(error.toString());
-		}
+		System.out.println("第"+(index-1)+"词法分析元素处发现了错误:"+tokenList.get(index-1).toString());
 	}
 	
 	private void printInput(){

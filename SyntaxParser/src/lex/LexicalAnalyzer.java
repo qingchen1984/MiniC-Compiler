@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class LexicalAnalyzer {
 	
 	public static void main(String[] args){
-		LexicalAnalyzer lex = new LexicalAnalyzer("source1.c");
+		LexicalAnalyzer lex = new LexicalAnalyzer("source.c");
 		ArrayList<Token> tokens = lex.getTokenList();
 		try {
 			lex.output(tokens, "result.c");
@@ -95,7 +95,7 @@ public class LexicalAnalyzer {
 	 * @return 单个Token
 	 */
 	private boolean flag = false;//用于判别双引号之间的字符串
-	private Token analyze(int index){
+	public Token analyze(int index){
 		int length = scan.getLength();
 		int type = -1;
 		String value = "";
@@ -132,7 +132,6 @@ public class LexicalAnalyzer {
 					continue;
 				}
 				String str = scan.getTestString(index);
-				//System.out.println(str);
 				String val = null;
 				if(str.startsWith("include")){
 					val = "include";
@@ -172,27 +171,35 @@ public class LexicalAnalyzer {
 					} else if(type == Type.LT){//<=
 						type = Type.LE;
 						value = "<=";
+						return new Token(type,value);
 					} else if(type == Type.GT){//>=
 						type = Type.GE;
 						value = ">=";
+						return new Token(type,value);
 					} else if(type == Type.ASSIGN){//==
 						type = Type.EQUAL;
 						value = "==";
+						return new Token(type,value);
 					} else if(type == Type.NOT){//!=
 						type = Type.NE;
 						value = "!=";
+						return new Token(type,value);
 					} else if(type == Type.ADD){//+=
 						type = Type.INCREASEBY;
 						value = "+=";
+						return new Token(type,value);
 					} else if(type == Type.SUB){//-=
 						type = Type.DECREASEBY;
 						value = "-=";
+						return new Token(type,value);
 					} else if(type == Type.DIV){///=
 						type = Type.DIVBY;
 						value = "/=";
+						return new Token(type,value);
 					} else if(type == Type.MUL){//*=
 						type = Type.MULBY;
 						value = "*=";
+						return new Token(type,value);
 					}
 					break;
 				case '+':
@@ -202,6 +209,7 @@ public class LexicalAnalyzer {
 					} else if(type == Type.ADD){//++
 						type = Type.INCREASE;
 						value = "++";
+						return new Token(type,value);
 					} 
 					break;
 				case '-':
@@ -211,13 +219,14 @@ public class LexicalAnalyzer {
 					} else if(type == Type.SUB){//--
 						type = Type.DECREASEBY;
 						value = "--";
+						return new Token(type,value);
 					}
 					break;
 				case '*':
 					if(type == -1){
 						type = Type.MUL;
 						value = "*";
-					}
+					} 
 					break;
 				case '/':
 					if(type == -1){
@@ -250,6 +259,7 @@ public class LexicalAnalyzer {
 					} else if(type == Type.OR_1){
 						type = Type.OR_2;
 						value = "||";
+						return new Token(type,value);
 					}
 					break;
 				case '&':
@@ -259,6 +269,7 @@ public class LexicalAnalyzer {
 					} else if(type == Type.AND_1){
 						type = Type.AND_2;
 						value = "&&";
+						return new Token(type,value);
 					}
 					break;
 				case ';':
@@ -271,36 +282,54 @@ public class LexicalAnalyzer {
 					if(type == -1){
 						type = Type.BRACE_L;
 						value = "{";
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
 					}
 					break;
 				case '}':
 					if(type == -1){
 						type = Type.BRACE_R;
 						value = "}";
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
 					}
 					break;
 				case '[':
 					if(type == -1){
 						type = Type.BRACKET_L;
 						value = "[";
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
 					}
 					break;
 				case ']':
 					if(type == -1){
 						type = Type.BRACKET_R;
 						value = "]";
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
 					}
 					break;
 				case '(':
 					if(type == -1){
 						type = Type.PARENTHESIS_L;
 						value = "(";
-					}
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
+					} 
 					break;
 				case ')':
 					if(type == -1){
 						type = Type.PARENTHESIS_R;
 						value = ")";
+					} else if(Type.isCalc(type)){
+						scan.retract(1);
+						return new Token(type,value);
 					}
 					break;
 				case '#':
@@ -332,12 +361,6 @@ public class LexicalAnalyzer {
 						value = "\"";
 					}
 					break;
-//				case :
-//					if(type == -1){
-//						type = Type.TRANSFER;
-//						
-//					}
-//					break;
 				default:
 					break;
 				}

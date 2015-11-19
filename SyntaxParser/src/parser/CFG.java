@@ -40,13 +40,22 @@ public class CFG {
 		for(String k:keyword){
 			keywords.add(k);
 		}
+//		S->if B S;|if B S; else S;|<id>=E|S;S
+//		B->B >= B|<num>|<id>
+//		E->E+E|E*E|<num>|<id>
 		//添加非终结符
-		//VN.add("E");VN.add("T");VN.add("E'");VN.add("T'");VN.add("F");
-		VN.add("S'");VN.add("S");VN.add("C");
-		//添加终结符
-		//VT.add("*");VT.add("id");VT.add("(");VT.add(")");VT.add("+");
-		VT.add("c");VT.add("d");
-		//VT.addAll(keywords);
+		VN.add("S'");VN.add("S");VN.add("B");VN.add("E");
+		VT.add("if");
+		VT.add("else");
+		VT.add(";");
+		VT.add("=");
+		VT.add(">=");
+		VT.add("<num>");
+		VT.add("<id>");
+		VT.add("*");
+		VT.add("+");
+		VT.add("(");
+		VT.add(")");
 		
 		addFirst();
 		//addFollow();

@@ -1,6 +1,6 @@
 package parser;
 
-public class LRDerivation {
+public class LRDerivation implements java.lang.Cloneable{
 	
 	public Derivation d;
 	public String lr;
@@ -30,8 +30,8 @@ public class LRDerivation {
 		return result;
 	}
 	
-	public boolean equals(LRDerivation lrd){
-		if(d.equals(lrd.d)&&lr.equals(lrd.lr)&&index==lrd.index){
+	public boolean equalTo(LRDerivation lrd){
+		if(d.equalTo(lrd.d)&&lr.hashCode()==lrd.lr.hashCode()&&index==lrd.index){
 			return true;
 		} else {
 			return false;
@@ -40,6 +40,10 @@ public class LRDerivation {
 	
 	public void print(){
 		System.out.println(this.toString());
+	}
+	
+	public Object clone(){
+		return new LRDerivation(d,lr,index);
 	}
 
 }

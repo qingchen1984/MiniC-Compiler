@@ -1,3 +1,4 @@
 S'->S
-S->C C
-C->c C|d
+S->if ( B ) S ;|if ( B ) S ; else S ;|<id> = E|S ; S
+B->B >= B|<num>|<id>
+E->E + E|E * E|<num>|<id>

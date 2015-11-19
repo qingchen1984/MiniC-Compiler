@@ -1,0 +1,51 @@
+package parser;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+
+public class Derivation {
+	
+	public String left;
+	public ArrayList<String> list = new ArrayList<String>();
+	
+	public Derivation(String s){
+		String[] div = s.split("->");
+		this.left = div[0];
+		String[] v = div[1].split(" ");
+		for(int i = 0;i < v.length;i++){
+			list.add(v[i]);
+		}
+	}
+	
+	public String toString(){
+		String result = left+"->";
+		for(String r:list){
+			result += r;
+			result += " ";
+		}
+		return result.trim();
+	}
+	
+	public boolean equals(Derivation d){
+		if(left.equals(d.left)&&contain(list,d.list)&&contain(d.list,list)){
+			System.out.println(true);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean contain(ArrayList<String> list1,ArrayList<String> list2){
+		for(String e:list2){
+			if(!list1.contains(e)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public void print(){
+		System.out.println(this.toString());
+	}
+
+}

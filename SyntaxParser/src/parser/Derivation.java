@@ -26,12 +26,27 @@ public class Derivation {
 		return result.trim();
 	}
 	
-	public boolean equals(Derivation d){
-		if(list.equals(d.list)&&left.equals(d.left)){
+	public boolean equalTo(Derivation d){
+		if(this.toString().equals(d.toString())){
 			return true;
 		} else {
 			return false;
 		}
+//		if(left.hashCode()==d.left.hashCode()){
+//			if(list.size() == d.list.size()){
+//				int size = list.size();
+//				for(int i = 0;i < size;i++){
+//					if(d.list.get(i).hashCode()!=list.get(i).hashCode()){
+//						return false;
+//					}
+//				}
+//				return true;
+//			} else {
+//				return false;
+//			}
+//		} else {
+//			return false;
+//		}
 	}
 	
 	public void print(){
